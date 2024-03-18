@@ -1,0 +1,20 @@
+AllCops:
+  TargetRubyVersion: 3.1
+  NewCops: enable
+  Exclude:
+    - 'bin/**/*'
+    - 'db/migrate/*'
+
+# Layout
+Layout/LineLength:
+  Max: 120
+
+# Metrics
+Metrics/BlockLength:
+  Max: 25
+
+# Style
+Style/Documentation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
