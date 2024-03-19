@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_170300) do
 
   create_table "cars", force: :cascade do |t|
     t.string "name"
-    t.string "status"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
