@@ -12,7 +12,7 @@ describe Rental, type: :model do
   describe '#set_car_to_rented' do
     let(:car) { create(:car) }
     let(:user) { create(:user) }
-    let(:rental) { build(:rental, car: car, user: user) }
+    let(:rental) { build(:rental, car:, user:) }
 
     it 'sets the car to rented' do
       expect { rental.save! }.to change { car.reload.status }.from('available').to('rented')
