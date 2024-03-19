@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  web:
+    build: .
+    command: rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/car_rent_api
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: development
+
+  db:
+    image: postgres
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
+  test:
+    build: .
+    command: bundle exec rspec
+    volumes:
+      - .:/car_rent_api
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: test
