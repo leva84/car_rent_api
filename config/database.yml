@@ -1,22 +1,26 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
 
 development:
   <<: *default
-  database: car_rent_api_development
+  host: db
   username: postgres
   password: password
+  database: car_rent_api_development
 
 test:
   <<: *default
-  database: car_rent_api_test
+  host: db
   username: postgres
   password: password
+  database: car_rent_api_test
 
 production:
   <<: *default
-  database: car_rent_api_production
-  username: postgres
-  password: <%= ENV["CAR_RENT_API_DATABASE_PASSWORD"] %>
+  host: <%= ENV['CAR_RENT_API_DATABASE_HOST'] || 'localhost' %>
+  port: <%= ENV['CAR_RENT_API_DATABASE_PORT'] || '5432' %>
+  database: <%= ENV['CAR_RENT_API_DATABASE'] || 'car_rent_api_production' %>
+  username: <%= ENV['CAR_RENT_API_DATABASE_USERNAME'] || 'postgres' %>
+  password: <%= ENV['CAR_RENT_API_DATABASE_PASSWORD'] || 'password' %>
