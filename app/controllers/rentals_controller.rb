@@ -1,5 +1,5 @@
 class RentalsController < ApplicationController
-  before_action :car, :user, :service
+  before_action :service
 
   def start_rental
     if service.start_rental
