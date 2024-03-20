@@ -4,6 +4,7 @@ AllCops:
   Exclude:
     - 'bin/**/*'
     - 'db/migrate/*'
+    - 'db/schema.rb'
 
 # Layout
 Layout/LineLength:
