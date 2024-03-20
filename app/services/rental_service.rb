@@ -56,6 +56,6 @@ class RentalService
   end
 
   def check_rental
-    errors.add(:rental, 'there is no rental') unless rental.present?
+    errors.add(:rental, 'not exists') unless rental.present?
   end
 end
