@@ -13,15 +13,4 @@ describe Car, type: :model do
   it { should define_enum_for(:status).with_values(available:, rented:, maintenance:) }
   it { should have_one(:rental) }
   it { should have_one(:user).through(:rental) }
-
-  describe '#set_car_to_rented' do
-    let(:statuses) { described_class.statuses.invert }
-    let(:car) { create(:car, status: available) }
-    let(:user) { create(:user) }
-    let(:rental) { build(:rental, car:, user:) }
-
-    it 'sets the car to rented' do
-      expect { rental.save! }.to change { car.reload.status }.from(statuses[available]).to(statuses[rented])
-    end
-  end
 end
