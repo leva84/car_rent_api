@@ -11,11 +11,17 @@ Layout/LineLength:
   Max: 120
 
 # Metrics
+Metrics/AbcSize:
+  Enabled: false
 Metrics/BlockLength:
-  Max: 25
+  Max: 30
+  Exclude:
+    - 'spec/controllers/**/*'
 
 # Style
 Style/Documentation:
   Enabled: false
 Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/HashSyntax:
   Enabled: false

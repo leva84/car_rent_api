@@ -69,7 +69,7 @@ describe RentalsController, type: :controller do
       end
 
       it 'logs a warning' do
-        expect(Rails.logger).to receive(:warn).with(/The rental has already exists/)
+        expect(Rails.logger).to receive(:warn).with(/Rental already exists/)
         subject
       end
 

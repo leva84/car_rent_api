@@ -10,10 +10,7 @@ class RentalService
 
   def start_rental
     return unless valid?
-
-    if rental.present?
-      return Rails.logger.warn "The rental has already exists for user ID:#{user.id} and car ID:#{car.id}"
-    end
+    return Rails.logger.warn "Rental already exists for user ID:#{user.id} and car ID:#{car.id}" if rental.present?
 
     check_car
     check_user
