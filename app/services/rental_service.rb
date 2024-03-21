@@ -17,7 +17,11 @@ class RentalService
 
   def start_rental
     return unless valid?
-    return Rails.logger.warn "Rental already exists ID:#{rental.id}" if rental.present?
+
+    if rental_data['key'] == START_RENTAL_KEY
+      Rails.logger.warn "Rental already exists ID:#{rental.id}"
+      return rental
+    end
 
     check_car
     check_user
