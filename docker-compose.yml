@@ -10,6 +10,7 @@ services:
       - 3000:3000
     depends_on:
       - db
+      - redis
     environment:
       RAILS_ENV: development
 
@@ -23,6 +24,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
 
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+
   test:
     build: .
     command: bundle exec rspec
@@ -30,5 +36,6 @@ services:
       - .:/car_rent_api
     depends_on:
       - db
+      - redis
     environment:
       RAILS_ENV: test

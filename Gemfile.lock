@@ -169,6 +169,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.1.0)
+    redis (4.8.1)
     regexp_parser (2.8.1)
     rexml (3.2.6)
     rspec-core (3.13.0)
@@ -229,6 +230,7 @@ DEPENDENCIES
   pry
   puma (~> 5.0)
   rails (~> 7.0.8, >= 7.0.8.1)
+  redis
   rspec-rails (~> 5.0)
   rubocop
   shoulda-matchers
