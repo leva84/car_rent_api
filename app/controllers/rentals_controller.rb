@@ -1,6 +1,4 @@
 class RentalsController < ApplicationController
-  before_action :service
-
   def start_rental
     if service.start_rental
       render json: service.rental, serializer: RentalSerializer, status: :ok
