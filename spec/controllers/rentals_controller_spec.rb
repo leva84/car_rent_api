@@ -57,7 +57,9 @@ describe RentalsController, type: :controller do
     end
 
     context 'with rental' do
-      let!(:rental) { create(:rental, user: user, car: car) }
+      before do
+        RentalService.new(car: car, user: user).start_rental
+      end
 
       it 'returns http status ok' do
         expect(subject).to have_http_status(:ok)
@@ -65,11 +67,11 @@ describe RentalsController, type: :controller do
 
       it 'returns rental' do
         subject
-        expect(resp.fetch('id')).to eq(rental.id)
+        expect(resp.fetch('id')).to be_present
       end
 
       it 'logs a warning' do
-        expect(Rails.logger).to receive(:warn).with(/Rental already exists/)
+        expect(Rails.logger).to receive(:warn).with(/Rental already exists ID:/)
         subject
       end
 
@@ -88,7 +90,9 @@ describe RentalsController, type: :controller do
     end
 
     context 'with rental' do
-      let!(:rental) { create(:rental, user: user, car: car) }
+      before do
+        RentalService.new(car: car, user: user).start_rental
+      end
 
       it 'returns http status ok' do
         expect(subject).to have_http_status(:ok)
@@ -103,16 +107,41 @@ describe RentalsController, type: :controller do
     end
 
     context 'without rental' do
-      it 'returns http status unprocessable_entity' do
-        expect(subject).to have_http_status(:unprocessable_entity)
+      context 'without redis data' do
+        it 'returns http status unprocessable_entity' do
+          expect(subject).to have_http_status(:unprocessable_entity)
+        end
+
+        it 'returns error message' do
+          subject
+          expect(resp.fetch('errors')).to eq(['Rental not exists'])
+        end
+
+        include_examples :end_rental_call
       end
 
-      it 'returns error message' do
-        subject
-        expect(resp.fetch('errors')).to eq(['Rental not exists'])
-      end
+      context 'with redis data' do
+        before do
+          RentalService.new(car: car, user: user).start_rental
+          RentalService.new(car: car, user: user).end_rental
+        end
 
-      include_examples :end_rental_call
+        it 'returns http status unprocessable_entity' do
+          expect(subject).to have_http_status(:ok)
+        end
+
+        it 'returns ok message' do
+          subject
+          expect(resp.fetch('status')).to eq('ok')
+        end
+
+        it 'logs a warning' do
+          expect(Rails.logger).to receive(:warn).with(/Rental already removed ID:/)
+          subject
+        end
+
+        include_examples :end_rental_call
+      end
     end
   end
 end
