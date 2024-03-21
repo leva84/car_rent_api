@@ -12,4 +12,6 @@ end
 users = User.all.sample((User.count * 0.3).to_i)
 cars = Car.all.sample((Car.count * 0.3).to_i)
 
-users.zip(cars).each { |user, car| Rental.create!(car:, user:) }
+users.zip(cars).each do |user, car|
+  RentalService.new(car: car, user: user).start_rental
+end
