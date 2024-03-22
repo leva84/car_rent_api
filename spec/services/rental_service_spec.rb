@@ -8,7 +8,7 @@ describe RentalService, type: :service do
 
   shared_examples :re_execution_without_cache do
     it 'does not change car status' do
-      expect { subject }.not_to change { car.reload.status }
+      expect { subject }.not_to(change { car.reload.status })
     end
 
     it 'does not change rental count' do
@@ -23,7 +23,7 @@ describe RentalService, type: :service do
 
   shared_examples :re_execution_with_cache do |operation_key|
     it 'does not change car status' do
-      expect { subject }.not_to change { car.reload.status }
+      expect { subject }.not_to(change { car.reload.status })
     end
 
     it 'does not change rental count' do
