@@ -3,6 +3,43 @@ describe RentalsController, type: :controller do
   let(:car) { create(:car) }
   let(:resp) { JSON.parse(response.body) }
 
+  shared_context :does_not_write_to_redis do
+    before do
+      allow_any_instance_of(RentalService).to receive(:write_rental_data_to_redis).and_raise(Redis::CommandError)
+    end
+
+    it 'does not create rental' do
+      expect { subject }.not_to change(Rental, :count)
+    end
+
+    it 'returns unprocessable_entity status' do
+      expect(subject).to have_http_status(:unprocessable_entity)
+    end
+  end
+
+  shared_context :raise_active_record do
+    before do
+      allow(Rental).to receive(:create).and_raise(ActiveRecord::RecordInvalid)
+    end
+
+    it 'does not write to Redis' do
+      expect_any_instance_of(RentalService).not_to receive(:write_rental_data_to_redis)
+      subject
+    end
+
+    it 'returns unprocessable_entity status' do
+      expect(subject).to have_http_status(:unprocessable_entity)
+    end
+  end
+
+  shared_examples :writes_to_redis do
+    it 'writes to Redis' do
+      allow_any_instance_of(RentalService).to receive(:write_rental_data_to_redis)
+      expect_any_instance_of(RentalService).to receive(:write_rental_data_to_redis)
+      subject
+    end
+  end
+
   describe 'POST #start_rental' do
     subject { post :start_rental, params: { user_id: user.id, car_id: car.id } }
 
@@ -24,6 +61,7 @@ describe RentalsController, type: :controller do
       end
 
       include_examples :start_rental_call
+      include_examples :writes_to_redis
     end
 
     context 'with invalid user' do
@@ -77,6 +115,9 @@ describe RentalsController, type: :controller do
 
       include_examples :start_rental_call
     end
+
+    it_behaves_like :does_not_write_to_redis
+    it_behaves_like :raise_active_record
   end
 
   describe 'DELETE #end_rental' do
@@ -104,6 +145,7 @@ describe RentalsController, type: :controller do
       end
 
       include_examples :end_rental_call
+      include_examples :writes_to_redis
     end
 
     context 'without rental' do
@@ -142,6 +184,9 @@ describe RentalsController, type: :controller do
 
         include_examples :end_rental_call
       end
+
+      it_behaves_like :does_not_write_to_redis
+      it_behaves_like :raise_active_record
     end
   end
 end

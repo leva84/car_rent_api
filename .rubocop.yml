@@ -16,7 +16,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Max: 30
   Exclude:
-    - 'spec/controllers/**/*'
+    - 'spec/**/*'
 Metrics/MethodLength:
   Max: 15
 
