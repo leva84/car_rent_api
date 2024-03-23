@@ -5,6 +5,8 @@ class RentalService
   START_RENTAL_KEY = 'start_rental'.freeze
   END_RENTAL_KEY = 'end_rental'.freeze
 
+  attr_reader :car, :user
+
   validates :user, :car, presence: true
 
   def initialize(car:, user:)
@@ -44,7 +46,7 @@ class RentalService
 
   private
 
-  attr_reader :car, :user, :client, :redis_key, :rental_data
+  attr_reader :client, :redis_key, :rental_data
 
   def perform_rental_operation(&operation)
     ActiveRecord::Base.transaction { operation.call }
