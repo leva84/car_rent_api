@@ -57,7 +57,7 @@ describe RentalsController, type: :controller do
 
       it 'returns rental' do
         subject
-        expect(resp.fetch('id')).to eq(Rental.last.id)
+        expect(resp['rental']['id']).to eq(Rental.last.id)
       end
 
       include_examples :start_rental_call
@@ -105,7 +105,7 @@ describe RentalsController, type: :controller do
 
       it 'returns rental' do
         subject
-        expect(resp.fetch('id')).to be_present
+        expect(resp['rental']['id']).to be_present
       end
 
       it 'logs a warning' do

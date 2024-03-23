@@ -1,7 +1,7 @@
 class RentalsController < ApplicationController
   def start_rental
     if service.start_rental
-      render json: service.rental, serializer: RentalSerializer, status: :ok
+      render json: service, serializer: RentalServiceSerializer, status: :ok
     else
       render json: service, serializer: ErrorSerializer, status: :unprocessable_entity
     end
